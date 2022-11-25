@@ -1,16 +1,34 @@
 package datalayer;
 
-import org.example.studentmanager.datalayer.exception.StudentNotFoundException;
-import org.example.studentmanager.model.Student;
 import org.example.studentmanager.datalayer.StudentDao;
+import org.example.studentmanager.model.Gender;
+import org.example.studentmanager.model.Student;
+import org.example.studentmanager.model.StudentLevel;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class MockStudentDAO implements StudentDao {
-    public List<Student> students = new ArrayList<Student>();
+    public List<Student> students;
+
+    public MockStudentDAO(){
+        students = initialize();
+    }
+
+    public static List<Student> initialize(){
+         ArrayList<Student> students = new ArrayList<>();
+         students.add(new Student("1", "John", LocalDate.of(2001, 12,21), Gender.MALE, 2.0, StudentLevel.GIOI));
+         students.add(new Student("2", "Bason", LocalDate.of(2001, 8,22), Gender.MALE, 2.0, StudentLevel.GIOI));
+         students.add(new Student("3", "Hannix", LocalDate.of(2001, 2,11), Gender.MALE, 2.0, StudentLevel.GIOI));
+         students.add(new Student("4", "Hannah", LocalDate.of(2001, 5,10), Gender.MALE, 2.0, StudentLevel.GIOI));
+         students.add(new Student("5", "Mason", LocalDate.of(2001, 3,24), Gender.MALE, 2.0, StudentLevel.GIOI));
+         students.add(new Student("6", "Kaneki", LocalDate.of(2001, 4,22), Gender.MALE, 2.0, StudentLevel.GIOI));
+
+         return students;
+    }
     @Override
     public void create(Student student) {
         if(students.stream().anyMatch(other -> student.getId().equals(other.getId()))){
@@ -31,11 +49,9 @@ public class MockStudentDAO implements StudentDao {
 
     @Override
     public boolean update(Student student) {
-        Student foundStudent;
         Integer foundIndex = null ;
         for(int i = 0; i < students.size(); i ++){
             if(students.get(i).getId().equalsIgnoreCase(student.getId())){
-                foundStudent = students.get(i);
                 foundIndex = i;
                 break;
             }

@@ -1,9 +1,10 @@
 package studentmanager;
 
 import datalayer.MockStudentDAO;
-import org.example.studentmanager.datalayer.StudentDao;
-import org.example.studentmanager.model.Student;
 import org.example.studentmanager.StudentManager;
+import org.example.studentmanager.datalayer.StudentDao;
+import org.example.studentmanager.model.Gender;
+import org.example.studentmanager.model.Student;
 import org.example.studentmanager.model.StudentLevel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,15 +29,13 @@ public class CreateStudentTest {
 
     @AfterEach
     void resetDatabase(){
-        studentDao = new MockStudentDAO();
-        studentManager = new StudentManager(studentDao);
-        Helper.setUpStudentData( (MockStudentDAO) (studentDao));
-
+        studentDao = null ;
+        studentManager = null;
     }
 
 
     /**
-     * Test cases cho hàm {@link  #isStudentValidTest  } dùng kiểm tra xem dữ liệu student đã đúng chưa
+     * Test cases cho hàm   #isStudentValidTest  dùng kiểm tra xem dữ liệu student đã đúng chưa
      * trước khi thực hiện bất cứ một query nào
      *
      * @param student: Mock object
@@ -60,34 +58,24 @@ public class CreateStudentTest {
 
     /**
      * @param student : mock student object
-     * @param message : Message trả về
      * Student được insert thành công vào cơ sở dữ liệu
      */
 
     @ParameterizedTest
     @MethodSource("studentmanager.Helper#provideDataFor_CreateStudent_Success")
-    void createStudentSuccess(Student student, String message)  {
+    void createStudentSuccess(Student student)  {
         studentManager.createStudent(student);
         Student expectedStudent = studentDao.readById(student.getId());
-        // do the actual test
-        assertAll("Test if two students are equal",
-                ()-> assertEquals(expectedStudent.getId(), student.getId()),
-                ()-> assertEquals(expectedStudent.getName(), student.getName()),
-                ()-> assertEquals(expectedStudent.getDOB(), student.getDOB()),
-                ()-> assertEquals(expectedStudent.getGPA(), student.getGPA()),
-                ()-> assertEquals(expectedStudent.getLevel(), student.getLevel()),
-                ()-> assertEquals(expectedStudent.getGender(), student.getGender())
-        );
+        assertSame(student,expectedStudent);
     }
 
     /**
      * Test case cho trường hợp id bị trùng với một id khác trong cơ sở dữ liệu
      */
     @Test
-    void createStudentFailure_WithInvalidId(){
-        Student student = new Student("1", "John", new Date(2000, Calendar.OCTOBER, 18), "Male", 2.0, StudentLevel.GIOI);
-        boolean isSuccess = studentManager.createStudent(student);
-        assertFalse(isSuccess);
+    void createStudentFailure_withId_that_alreadyExist(){
+        Student student = new Student("1", "John", LocalDate.of(2001, 12,21), Gender.MALE, 2.0, StudentLevel.GIOI);
+        assertFalse(studentManager.createStudent(student));
     }
 
     /**

@@ -52,16 +52,9 @@ public class ReadStudentTest {
         }
 
         @AfterEach
-        void resetDatabase(){
+        void resetDatabase() {
             studentDao = new MockStudentDAO();
             studentManager = new StudentManager(studentDao);
-        }
-
-        @Test
-        void readAllStudent_EmptyCase(){
-            List<Student> students = studentDao.readAll();
-            assertEquals(0, students.size());
-
         }
     }
 

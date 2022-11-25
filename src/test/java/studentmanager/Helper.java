@@ -1,12 +1,12 @@
 package studentmanager;
 
-import com.google.gson.Gson;
 import datalayer.MockStudentDAO;
-import org.example.constant.AppString;
+import org.example.studentmanager.model.Gender;
 import org.example.studentmanager.model.Student;
 import org.example.studentmanager.model.StudentLevel;
 import org.junit.jupiter.params.provider.Arguments;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -26,22 +26,23 @@ public class Helper {
     };
 
     static void setUpStudentData(MockStudentDAO studentDAOTest){
-        Gson gson = new Gson();
-        Student student = new Student(
-                "1",
-                "John",
-                new Date(2000, Calendar.OCTOBER, 18),
-                "Male",
-                2.0,
-                StudentLevel.GIOI
-        );
+        Student student0 =
+                new Student("1", "John",
+                        LocalDate.of(2001, 8,22),
+                        Gender.MALE, 2.0, StudentLevel.GIOI);
+        Student student =
+                new Student("2", "Bason",
+                        LocalDate.of(2001, 8,22),
+                        Gender.MALE, 2.0, StudentLevel.GIOI);
 
         ArrayList<Student> students = new ArrayList<>();
         students.add(student);
+        students.add(student0);
         for(int i = 0; i < 10; i ++){
-            Student student1 = gson.fromJson(gson.toJson(student), Student.class);
-            student1.setId(String.valueOf(i));
-            student1.setName(names[new Random().nextInt(names.length ) ]);
+            Student student1 = new Student(String.valueOf(i),
+                    names[new Random().nextInt(names.length ) ],
+                    LocalDate.of(2001, 8,22),
+                    Gender.MALE, 3.5, StudentLevel.GIOI);
             students.add(student1);
         }
 
@@ -49,37 +50,17 @@ public class Helper {
     }
 
     static Stream<Arguments> provideInvalidStudentsObject(){
-        Gson gson = new Gson();
-        Student student = new Student(
-                "1",
-                "John",
-                new Date(2000, Calendar.OCTOBER, 18),
-                "Male",
-                2.0,
-                StudentLevel.GIOI
-        );
 
-        Student student1 = gson.fromJson(gson.toJson(student), Student.class);
-        student1.setId(null);
+        Student student1 = new Student(null, "John", LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
+        Student student2 = new Student("1", null, LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
+        Student student3 = new Student("1", "John", null, Gender.MALE, 2.0, StudentLevel.GIOI);
 
-        Student student2 = gson.fromJson(gson.toJson(student), Student.class);
-        student2.setName(null);
+        Student student4 = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, null, StudentLevel.GIOI);
+        Student student5 = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, 11.0, StudentLevel.GIOI);
 
-        Student student3 = gson.fromJson(gson.toJson(student), Student.class);
-        student3.setDOB(null);
+        Student student6 = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, -1.0, StudentLevel.GIOI);
+        Student student7 = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, -1.0, null);
 
-        Student student4 = gson.fromJson(gson.toJson(student), Student.class);
-        student4.setGPA(null);
-
-        Student student5 = gson.fromJson(gson.toJson(student), Student.class);
-        student5.setGPA(11.0);
-
-        Student student6 = gson.fromJson(gson.toJson(student), Student.class);
-        student6.setGPA(-1.0);
-
-
-        Student student7 = gson.fromJson(gson.toJson(student), Student.class);
-        student7.setLevel(null);
 
         return Stream.of(
                 Arguments.of(student1, false, "Id can't be null"),
@@ -94,40 +75,21 @@ public class Helper {
 
 
     static Stream<Arguments> provideStudentObject_ForFunctionCheckIfStudentIsValid(){
-        Gson gson = new Gson();
-        Student student = new Student(
-                "1",
-                "John",
-                new Date(2000, Calendar.OCTOBER, 18),
-                "Male",
-                2.0,
-                StudentLevel.GIOI
-        );
+        Student student = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
 
-        Student student1 = gson.fromJson(gson.toJson(student), Student.class);
-        student1.setId(null);
+        Student student1 = new Student(null, "John", LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
+        Student student2 = new Student("1", null, LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
+        Student student3 = new Student("1", "John", null, Gender.MALE, 2.0, StudentLevel.GIOI);
 
-        Student student2 = gson.fromJson(gson.toJson(student), Student.class);
-        student2.setName(null);
+        Student student4 = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, null, StudentLevel.GIOI);
+        Student student5 = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, 11.0, StudentLevel.GIOI);
 
-        Student student3 = gson.fromJson(gson.toJson(student), Student.class);
-        student3.setDOB(null);
+        Student student6 = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, -1.0, StudentLevel.GIOI);
+        Student student7 = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, -1.0, null);
 
-        Student student4 = gson.fromJson(gson.toJson(student), Student.class);
-        student4.setGPA(null);
-
-        Student student5 = gson.fromJson(gson.toJson(student), Student.class);
-        student5.setGPA(11.0);
-
-        Student student6 = gson.fromJson(gson.toJson(student), Student.class);
-        student6.setGPA(-1.0);
-
-
-        Student student7 = gson.fromJson(gson.toJson(student), Student.class);
-        student7.setLevel(null);
 
         return Stream.of(
-                Arguments.of(student, true, "Student is OKay"),
+                Arguments.of(student, true, "Ok"),
                 Arguments.of(student1, false, "Id can't be null"),
                 Arguments.of(student2, false, "Name can't be null"),
                 Arguments.of(student3, false, "Date of birth can't be null"),
@@ -140,61 +102,23 @@ public class Helper {
 
 
     static Stream<Arguments> provideDataFor_CreateStudent_Success(){
-        Gson gson = new Gson();
-        Student s1 = new Student(
-                "suenaf-asswer-dfffjj",
-                "John",
-                new Date(2000, Calendar.OCTOBER, 18),
-                "Male",
-                2.0,
-                StudentLevel.GIOI
-        );
 
-
+        Student s1 = new Student("suenaf-asswer-dfffjj", "John", LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
+        Student s2 = new Student("suenaf-asswe", "", LocalDate.of(2003, 10,18), Gender.MALE, 1.4, StudentLevel.TRUNG_BINH);
+        Student s3 = new Student("suenaf", "John", LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
 
         return Stream.of(
-                Arguments.of(s1,"Create success")
-//                Arguments.of(s1,"Create success with ")
-        );
-    }
-
-
-
-    static Stream<Arguments> provideDataFor_CreateStudent_Failure(){
-        Gson gson = new Gson();
-        Student s1 = new Student(
-                "1",
-                "John",
-                new Date(2000, Calendar.OCTOBER, 18),
-                "Male",
-                2.0,
-                StudentLevel.GIOI
-        );
-
-
-        Student s2 = gson.fromJson(gson.toJson(s1), Student.class);
-        s2.setId("2");
-
-        return Stream.of(
-                Arguments.of(s1, AppString.STUDENT_ID_IS_NOT_VALID,"Id is duplicated with other student that already in the database"),
-                Arguments.of(s2, AppString.STUDENT_OBJECT_IS_NOT_VALID,"student is invalid")
+                Arguments.of(s1,"Create success"),
+                Arguments.of(s2,"Create success"),
+                Arguments.of(s3,"Create success")
         );
     }
 
 
 
         static Stream<Arguments> provideDataFor_UpdateUser_Success(){
-
-        Gson gson = new Gson();
-        Student student = new Student(
-                "1",
-                "John",
-                new Date(2000, Calendar.OCTOBER, 18),
-                "Male",
-                2.0,
-                StudentLevel.GIOI
-        );
-        return Stream.of(
+        Student student = new Student("1", "John", LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
+            return Stream.of(
                 Arguments.of(student, "Success case"),
                 Arguments.of(student, "Ca")
         );

@@ -29,7 +29,6 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-params:5.9.0"
     implementation 'com.h2database:h2-mvstore:2.1.214'
 
-    implementation 'com.google.code.gson:gson:2.10'
     implementation 'org.hamcrest:hamcrest-core:2.2'
     implementation 'org.hamcrest:hamcrest-parent:1.3'
 }

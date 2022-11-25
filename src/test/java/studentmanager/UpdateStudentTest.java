@@ -3,6 +3,7 @@ package studentmanager;
 import datalayer.MockStudentDAO;
 import org.example.studentmanager.StudentManager;
 import org.example.studentmanager.datalayer.StudentDao;
+import org.example.studentmanager.model.Gender;
 import org.example.studentmanager.model.Student;
 import org.example.studentmanager.model.StudentLevel;
 import org.junit.jupiter.api.AfterEach;
@@ -11,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,12 +42,11 @@ public class UpdateStudentTest {
     /**
      *
      * @param student: Mock student
-     * @param testMessage: Message sau khi test
      * Trường hợp update thành công
      */
     @ParameterizedTest
     @MethodSource("studentmanager.Helper#provideDataFor_UpdateUser_Success")
-    void updateUserTest_Success(Student student, String testMessage ) {
+    void updateUserTest_Success(Student student ) {
         studentManager.updateStudent(student);
         Student foundStudent = studentDao.readById(student.getId());
         assertAll("Test if two students are equal",
@@ -69,7 +68,9 @@ public class UpdateStudentTest {
 
     @Test
     void updateUserTest_FailWith_NotFoundObject(){
-        Student student = new Student("1123123", "John", new Date(2000, Calendar.OCTOBER, 18), "Male", 2.0, StudentLevel.GIOI);
+        Student student =
+                new Student("1123123", "John", LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
+
         boolean isSuccess = studentManager.updateStudent(student);
         assertFalse(isSuccess);
     }
