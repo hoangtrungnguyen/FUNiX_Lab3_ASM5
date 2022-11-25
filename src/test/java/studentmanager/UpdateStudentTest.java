@@ -61,13 +61,13 @@ public class UpdateStudentTest {
 
     @ParameterizedTest
     @MethodSource("studentmanager.Helper#provideInvalidStudentsObject")
-    void updateUserTest_FailWith_InvalidStudentObject(Student student){
+    void updateUserTest_InvalidStudentObject(Student student){
         boolean isSuccess = studentManager.updateStudent(student);
         assertFalse(isSuccess);
     }
 
     @Test
-    void updateUserTest_FailWith_NotFoundObject(){
+    void updateUserTest_NotFoundObject(){
         Student student =
                 new Student("1123123", "John", LocalDate.of(2000, 10,18), Gender.MALE, 2.0, StudentLevel.GIOI);
 

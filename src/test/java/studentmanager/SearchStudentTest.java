@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SearchStudentTest {
@@ -35,6 +36,12 @@ public class SearchStudentTest {
     void searchStudent_Success(){
         List<Student> students = studentManager.searchByName("Ng");
         assertTrue(students.size() > 0);
+    }
+
+    @Test
+    void searchStudent_NotFound(){
+        List<Student> students = studentManager.searchByName("Ngassssssss");
+        assertEquals(0, students.size());
     }
 
 }

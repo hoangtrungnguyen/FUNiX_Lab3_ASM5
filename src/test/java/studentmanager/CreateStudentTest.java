@@ -51,7 +51,7 @@ public class CreateStudentTest {
      */
     @ParameterizedTest
     @MethodSource("studentmanager.Helper#provideStudentObject_ForFunctionCheckIfStudentIsValid")
-    void isStudentValidTest(Student student, boolean expected, String message){
+    void isStudentValid_NormalCase(Student student, boolean expected, String message){
         assertEquals(expected,studentManager.isStudentValid(student),message);
     }
 
@@ -63,7 +63,7 @@ public class CreateStudentTest {
 
     @ParameterizedTest
     @MethodSource("studentmanager.Helper#provideDataFor_CreateStudent_Success")
-    void createStudentSuccess(Student student)  {
+    void createStudent_SuccessCase(Student student)  {
         studentManager.createStudent(student);
         Student expectedStudent = studentDao.readById(student.getId());
         assertSame(student,expectedStudent);
@@ -73,7 +73,7 @@ public class CreateStudentTest {
      * Test case cho trường hợp id bị trùng với một id khác trong cơ sở dữ liệu
      */
     @Test
-    void createStudentFailure_withId_that_alreadyExist(){
+    void createStudent_withIdThatAlreadyExisted(){
         Student student = new Student("1", "John", LocalDate.of(2001, 12,21), Gender.MALE, 2.0, StudentLevel.GIOI);
         assertFalse(studentManager.createStudent(student));
     }
@@ -83,7 +83,7 @@ public class CreateStudentTest {
      */
     @ParameterizedTest
     @MethodSource("studentmanager.Helper#provideInvalidStudentsObject")
-    void createStudentFailure_WithInvalidFields(Student student){
+    void createStudent_WithInvalidFields(Student student){
         boolean isSuccess = studentManager.createStudent(student);
         assertFalse(isSuccess);
     }

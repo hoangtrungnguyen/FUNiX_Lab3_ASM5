@@ -50,7 +50,7 @@ public class EmailManagerTest {
 
     @ParameterizedTest
     @MethodSource("provideEmailForFalseCase")
-    void inValidEmail(String email, boolean expected, String message){
+    void inValidEmail_NormalCases(String email, boolean expected, String message){
 
         EmailManager manager = new EmailManager();
 
